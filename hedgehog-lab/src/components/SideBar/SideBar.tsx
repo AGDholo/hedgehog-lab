@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Drawer,
   List,
@@ -8,18 +8,22 @@ import {
   makeStyles,
   Theme,
   createStyles,
-  ListSubheader
-} from '@material-ui/core';
+  ListSubheader,
+  IconButton,
+} from "@material-ui/core";
 // @ts-ignore
-import { tutorials } from '../../tutorials';
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { tutorials } from "../../tutorials";
 
 interface SideBarProps {
   handleLoadTutorial: (event: React.MouseEvent, i: number) => void;
+  open?: boolean;
+  handleClick?: () => void;
 }
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     drawer: {
       width: drawerWidth,
@@ -29,29 +33,32 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
     },
     drawerContainer: {
-      overflow: 'auto',
+      overflow: "auto",
     },
-  }),
+    drawerShow: {
+      display: (props: SideBarProps) => (props.open ? "block" : "none"),
+    },
+  })
 );
 
-
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
-  const {
-    handleLoadTutorial,
-  } = props;
-
-  const classes = useStyles();
+  const { handleLoadTutorial, open, handleClick } = props;
+  const classes = useStyles(props);
 
   return (
     <Drawer
-      variant="permanent"
+      variant="persistent"
       anchor="left"
-      className={classes.drawer}
+      open={open}
+      className={`${classes.drawer} ${classes.drawerShow}`}
       classes={{
         paper: classes.drawerPaper,
       }}
     >
       <Toolbar />
+      <IconButton onClick={handleClick}>
+        <ChevronLeftIcon />
+      </IconButton>
       <div className={classes.drawerContainer}>
         <List
           subheader={
@@ -63,7 +70,11 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
           {tutorials.map(
             (tutorial: { description: React.ReactNode }, i: number) => {
               return (
-                <ListItem key={`${i}-${Date.now()}`} button onClick={(e) => handleLoadTutorial(e, i)}>
+                <ListItem
+                  key={`${i}-${Date.now()}`}
+                  button
+                  onClick={(e) => handleLoadTutorial(e, i)}
+                >
                   <ListItemText primary={`${i + 1}: ${tutorial.description}`}>
                     Tutorial {i + 1}: {tutorial.description}
                   </ListItemText>

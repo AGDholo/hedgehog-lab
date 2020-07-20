@@ -1,70 +1,86 @@
-import React, { useState, useEffect } from 'react'
-import { Grid, Container, Box, CssBaseline, Toolbar } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Header from './components/Header/Header'
-import YourCode from './components/YourCode/YourCode'
-import Results from './components/Results/Results'
-import Footer from './components/Footer/Footer'
-import { tutorials } from './tutorials'
-import OutputItemType from './core/output/output-item'
-import { useMutation } from 'react-query'
-import { compiler, releaseWorker } from './core'
-import SideBar from './components/SideBar/SideBar';
+import React, { useState, useEffect } from "react";
+import {
+  Grid,
+  Container,
+  Box,
+  CssBaseline,
+  Toolbar,
+  IconButton,
+} from "@material-ui/core";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import Header from "./components/Header/Header";
+import YourCode from "./components/YourCode/YourCode";
+import Results from "./components/Results/Results";
+import Footer from "./components/Footer/Footer";
+import { tutorials } from "./tutorials";
+import OutputItemType from "./core/output/output-item";
+import { useMutation } from "react-query";
+import { compiler, releaseWorker } from "./core";
+import MenuIcon from "@material-ui/icons/Menu";
+import SideBar from "./components/SideBar/SideBar";
 
 const DEFAULT_SOURCE = `//write your code here
 print("hello world")
-`
+`;
 
 const HedgehogLab: React.FC<{}> = () => {
-  const [source, setSource] = useState<string>(DEFAULT_SOURCE)
+  const [source, setSource] = useState<string>(DEFAULT_SOURCE);
+  const [isSideBarOpen, setIsSiderBarOpen] = useState<boolean>(false);
   const [result, setResult] = useState<{
-    outputItem: OutputItemType[]
-    outputString: string
+    outputItem: OutputItemType[];
+    outputString: string;
   }>({
     outputItem: [],
-    outputString: '',
-  })
+    outputString: "",
+  });
   const [complie, { isLoading }] = useMutation(compiler, {
-    onSuccess: (result: React.SetStateAction<{ outputItem: OutputItemType[]; outputString: string }>) => {
-      setResult(result)
+    onSuccess: (
+      result: React.SetStateAction<{
+        outputItem: OutputItemType[];
+        outputString: string;
+      }>
+    ) => {
+      setResult(result);
     },
     onError: () => {
-      console.log('Hedgehog Lab: Failed')
+      console.log("Hedgehog Lab: Failed");
     },
-  })
+  });
 
   const handleLoadTutorial = (event: React.MouseEvent, index: number) => {
-    setSource(tutorials[index].source as string)
+    setSource(tutorials[index].source as string);
     setResult({
       outputItem: [],
-      outputString: '',
-    })
-    complie(tutorials[index].source as string)
-  }
-
+      outputString: "",
+    });
+    complie(tutorials[index].source as string);
+  };
+  const handleSideBarClick = () => {
+    setIsSiderBarOpen(!isSideBarOpen);
+  };
   const handleCompileAndRun = () => {
     setResult({
       outputItem: [],
-      outputString: '',
-    })
-    complie(source)
-  }
+      outputString: "",
+    });
+    complie(source);
+  };
 
   useEffect(() => {
     return () => {
-      releaseWorker()
-    }
-  }, [])
+      releaseWorker();
+    };
+  }, []);
 
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
-        display: 'flex',
+        display: "flex",
       },
       content: {
         flexGrow: 1,
       },
-    }),
+    })
   );
 
   const classes = useStyles();
@@ -75,26 +91,38 @@ const HedgehogLab: React.FC<{}> = () => {
         <CssBaseline />
 
         <Header />
-
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={() => {
+            handleSideBarClick();
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
         <SideBar
+          open={isSideBarOpen}
           handleLoadTutorial={handleLoadTutorial}
+          handleClick={handleSideBarClick}
         />
 
         <main className={classes.content}>
           <Toolbar />
 
-          <Grid container>
-            <Grid
-              item
-              xs={12}
-            >
+          {/* <Grid container> */}
+            {/* <Grid item xs={12}> */}
+
               <Grid
                 container
                 style={{
-                  height: "calc(100vh - 174px)"
+                  height: "calc(100vh - 174px)",
                 }}
               >
-                <Grid item xs={12} md={6}>
+                <Grid item 
+                // xs={12} md={6}
+                xs
+                >
                   <YourCode
                     handleCompileAndRun={handleCompileAndRun}
                     setSource={setSource}
@@ -105,11 +133,12 @@ const HedgehogLab: React.FC<{}> = () => {
 
                 <Grid
                   item
-                  xs={12}
-                  md={6}
+                  // xs={12}
+                  // md={6}
+                  xs
                   style={{
                     height: "calc(100vh - 64px)",
-                    overflowY: "auto"
+                    overflowY: "auto",
                   }}
                 >
                   <Results
@@ -119,15 +148,14 @@ const HedgehogLab: React.FC<{}> = () => {
                   />
                 </Grid>
               </Grid>
-            </Grid>
-          </Grid>
+            {/* </Grid> */}
+          {/* </Grid> */}
 
           <Footer />
         </main>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HedgehogLab
+export default HedgehogLab;
