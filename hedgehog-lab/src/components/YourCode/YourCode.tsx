@@ -1,16 +1,16 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Button,
   Card,
   CardContent,
   CardHeader,
   CircularProgress,
-} from '@material-ui/core';
+} from "@material-ui/core";
 import {
   ControlledEditor,
   ControlledEditorOnChange,
-} from '@monaco-editor/react';
-import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
+} from "@monaco-editor/react";
+import * as monacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
 // @ts-ignore
 
@@ -18,68 +18,92 @@ const COMPILE_AND_RUN_BUTTON_ID = "compile-and-run-button-id";
 
 interface YourCodeProps {
   handleCompileAndRun: (event: React.MouseEvent) => void;
-  source: string
+  source: string;
   loading: boolean;
-  setSource: Dispatch<SetStateAction<string>>
+  setSource: Dispatch<SetStateAction<string>>;
+  handleTutorialsClick: () => void;
 }
 
 const YourCode: React.FC<YourCodeProps> = (props: YourCodeProps) => {
-
   const {
     handleCompileAndRun,
     loading,
     setSource,
     source,
+    handleTutorialsClick,
   } = props;
 
   const handleUploadSource: ControlledEditorOnChange = (e, v) => {
-    setSource(v as string)
-  }
+    setSource(v as string);
+  };
 
   const options = {
-    wordWrap: 'on' as 'on',
+    wordWrap: "on" as "on",
     scrollBeyondLastLine: false,
   };
 
-  const handleEditorDidMount = (_: () => string, editor: monacoEditor.editor.IStandaloneCodeEditor) => {
+  const handleEditorDidMount = (
+    _: () => string,
+    editor: monacoEditor.editor.IStandaloneCodeEditor
+  ) => {
     editor.addAction({
       id: COMPILE_AND_RUN_BUTTON_ID,
       label: "compile-and-run-butt-label",
       keybindings: [2051], // Monaco.KeyMod.CtrlCmd | Monaco.KeyCode.Enter == 2051
       run: () => {
         document.getElementById(COMPILE_AND_RUN_BUTTON_ID)?.click();
-      }
+      },
     });
   };
 
   return (
     <div style={{ height: "100%" }}>
-      <Card variant="outlined" className='your-code-card' style={{ height: "100%" }}>
+      <Card
+        variant="outlined"
+        className="your-code-card"
+        style={{ height: "100%" }}
+      >
         <CardHeader
           action={
-            <div className="run-button">
-              <Button
-                id={COMPILE_AND_RUN_BUTTON_ID}
-                variant="contained"
-                color="primary"
-                onClick={(e) => handleCompileAndRun(e)}
-                style={{ textTransform: 'none' }}
-                disabled={loading}
-              >
-                Compile and run
-              </Button>
-              {loading && (
-                <CircularProgress size={24} className={'run-button-loading'} />
-              )}
+            <div className="button-container">
+              <div className="tutorials-button">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleTutorialsClick}
+                >
+                  Tutorials
+                </Button>
+              </div>
+              <div className="run-button">
+                <Button
+                  id={COMPILE_AND_RUN_BUTTON_ID}
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => handleCompileAndRun(e)}
+                  style={{ textTransform: "none" }}
+                  disabled={loading}
+                >
+                  Compile and run
+                </Button>
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    className={"run-button-loading"}
+                  />
+                )}
+              </div>
             </div>
           }
           title="Your code:"
         />
 
         <CardContent>
-          <div style={{
-            height: 'calc(100vh - 174px)'
-          }}>
+          <div
+            style={{
+              height: "calc(100vh - 174px)",
+            }}
+          >
             <ControlledEditor
               language="javascript"
               value={source}

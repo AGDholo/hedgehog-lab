@@ -40,3 +40,10 @@
   left: calc(50% - 12px);
   top: calc(50% - 12px);
 }
+.button-container{
+  display: flex;
+  justify-content: space-evenly;
+}
+.tutorials-button{
+  margin-right: 10px;
+}

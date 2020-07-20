@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Container,
-  Box,
-  CssBaseline,
-  Toolbar,
-  IconButton,
-} from "@material-ui/core";
+import { Grid, CssBaseline, Toolbar } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+
 import Header from "./components/Header/Header";
 import YourCode from "./components/YourCode/YourCode";
 import Results from "./components/Results/Results";
@@ -16,7 +10,6 @@ import { tutorials } from "./tutorials";
 import OutputItemType from "./core/output/output-item";
 import { useMutation } from "react-query";
 import { compiler, releaseWorker } from "./core";
-import MenuIcon from "@material-ui/icons/Menu";
 import SideBar from "./components/SideBar/SideBar";
 
 const DEFAULT_SOURCE = `//write your code here
@@ -90,52 +83,39 @@ const HedgehogLab: React.FC<{}> = () => {
       <div className={classes.root}>
         <CssBaseline />
 
-        <Header />
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          edge="start"
-          onClick={() => {
-            handleSideBarClick();
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
+        <Header handleLoadTutorial={handleLoadTutorial} />
+
         <SideBar
-          open={isSideBarOpen}
           handleLoadTutorial={handleLoadTutorial}
           handleClick={handleSideBarClick}
+          open={isSideBarOpen}
         />
 
         <main className={classes.content}>
           <Toolbar />
 
-          {/* <Grid container> */}
-            {/* <Grid item xs={12}> */}
-
+          <Grid container>
+            <Grid item xs={12}>
               <Grid
                 container
                 style={{
                   height: "calc(100vh - 174px)",
                 }}
               >
-                <Grid item 
-                // xs={12} md={6}
-                xs
-                >
+                <Grid item xs={12} md={6}>
                   <YourCode
                     handleCompileAndRun={handleCompileAndRun}
                     setSource={setSource}
                     source={source}
                     loading={isLoading}
+                    handleTutorialsClick={handleSideBarClick}
                   />
                 </Grid>
 
                 <Grid
                   item
-                  // xs={12}
-                  // md={6}
-                  xs
+                  xs={12}
+                  md={6}
                   style={{
                     height: "calc(100vh - 64px)",
                     overflowY: "auto",
@@ -148,8 +128,8 @@ const HedgehogLab: React.FC<{}> = () => {
                   />
                 </Grid>
               </Grid>
-            {/* </Grid> */}
-          {/* </Grid> */}
+            </Grid>
+          </Grid>
 
           <Footer />
         </main>
