@@ -23,7 +23,7 @@ Once cloned, navigate to the folder by typing cd `hedgehog-lab` and then running
 
 ```bash
 # Navigate to the hedgehog-lab folder
-cd hedgehog-lab
+cd hedgehog-lab/hedgehog-lab
 
 # Install all project dependencies
 npm i
@@ -70,6 +70,6 @@ Before doing any commits, you will want to pull down the latest and greatest fro
 * For bug fixes and documentation updates submit pull requests to master.  
 * For new features and enhancements submit pull requests to dev
 
-### Pull Requests For Docs
+### Pull Requests For Docs(draft)
 
 For any pull requests related to hedgehog-lab docs, submit your pull request to the master branch.
