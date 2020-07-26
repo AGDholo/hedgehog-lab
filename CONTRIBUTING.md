@@ -19,6 +19,9 @@ git clone git@github.com:<your_username>/hedgehog-lab.git
 Once cloned, navigate to the folder by typing cd `hedgehog-lab` and then running the following commands:
 
 ```bash
+# Navigate to the hedgehog-lab folder
+cd hedgehog-lab/hedgehog-lab
+
 # Install all project dependencies
 yarn install
 
@@ -64,6 +67,6 @@ Before doing any commits, you will want to pull down the latest and greatest fro
 
 - For any new features, bug fixes and documentation updates, submit pull requests to master.
 
-### Pull Requests For Docs
+### Pull Requests For Docs(draft)
 
 For any pull requests related to hedgehog-lab docs, submit your pull request to the master branch.
